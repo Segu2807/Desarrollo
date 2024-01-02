@@ -1,1 +1,42 @@
+import openai
 
+# Configura tu clave API y organización
+openai.organization = 'org-rs8cJrK6JLO3bYORxgHAUtHE'
+openai.api_key = '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'
+
+
+def decimal_to_binary(decimal_number):
+    binary_number = bin(decimal_number).replace("0b", "")
+    return binary_number
+
+
+def generate_prompt(decimal_number):
+    return f"Convierte el número decimal {decimal_number} a binario."
+
+
+def openai_conversion(prompt):
+    response = openai.Completion.create(
+        engine="text-davinci-003",  # Puedes ajustar el motor según tus necesidades
+        prompt=prompt,
+        max_tokens=50  # Ajusta según sea necesario
+    )
+    return response['choices'][0]['text'].strip()
+
+
+def main():
+    decimal_number = int(input("Ingrese el número decimal a convertir: "))
+
+    prompt = generate_prompt(decimal_number)
+    response = openai_conversion(prompt)
+
+    print(f"Respuesta de OpenAI: {response}")
+
+    try:
+        binary_result = decimal_to_binary(decimal_number)
+        print(f"Resultado esperado: {binary_result}")
+    except ValueError:
+        print("Error al convertir el número decimal a binario.")
+
+
+if __name__ == "__main__":
+    main()
